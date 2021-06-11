@@ -1,6 +1,6 @@
 {
   "name": "generator-common-sdk",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "生成通用的编写sdk的项目结构",
   "homepage": "",
   "author": {
@@ -12,7 +12,7 @@
   ],
   "main": "generators/index.js",
   "keywords": [
-    "",
+    "sdk",
     "yeoman-generator"
   ],
   "repository": "git@github.com:ywymoshi/generator-common-sdk.git",
