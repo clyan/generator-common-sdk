@@ -29,6 +29,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'name',
         message: 'Your project name',
+        default: '',
         validate: name => {
           if (!name) {
             return 'Project name cannot be empty'
@@ -64,16 +65,16 @@ module.exports = class extends Generator {
         name: 'username',
         message: 'Your name',
         default: this.username
-      },
-      {
-        type: 'list',
-        name: 'registry',
-        message: 'Which registry would you use?',
-        choices: [
-          'https://registry.npm.taobao.org',
-          'https://registry.npmjs.org'
-        ]
       }
+      // ,{
+      //   type: 'list',
+      //   name: 'registry',
+      //   message: 'Which registry would you use?',
+      //   choices: [
+      //     'https://registry.npm.taobao.org',
+      //     'https://registry.npmjs.org'
+      //   ]
+      // }
     ];
 
     return this.prompt(prompts).then(answers => {
@@ -81,12 +82,10 @@ module.exports = class extends Generator {
       const keywords = answers.keywords;
       this.answers = answers;
       this.obj = {answers: this.answers};
-
     });
   }
 
   configuring(answers) {
-
     const done = this.async()
     fs.exists(this.destinationPath(this.answers.name), exists => {
       if (exists && fs.statSync(this.destinationPath(this.answers.name)).isDirectory()) {
@@ -100,18 +99,17 @@ module.exports = class extends Generator {
 
 
   writing() {
-
-
-    this.fs.copyTpl(this.templatePath('src'), this.destinationPath('src'), this.obj, {
+    this.fs.copyTpl(this.templatePath('src'), this.destinationPath('lib'), this.obj, {
         interpolate: /<%=([\s\S]+?)%>/g
     });
     this.fs.copyTpl(this.templatePath('test'), this.destinationPath('test'));
 
-    this.fs.copyTpl(this.templatePath('./src/index.ts'), this.destinationPath('./src/index.ts'), this.obj);
+    this.fs.copyTpl(this.templatePath('./src/index.ts'), this.destinationPath('./lib/index.ts'), this.obj);
+    this.fs.copyTpl(this.templatePath('./src/type.d.ts'), this.destinationPath('./lib/type.d.ts'), this.obj);
     this.fs.copy(this.templatePath('babelrc'), this.destinationPath('.babelrc'))
     this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'))
     this.fs.copy(this.templatePath('editorconfig'), this.destinationPath('.editorconfig'))
-
+    this.fs.copy(this.templatePath('npmignore'), this.destinationPath('.npmignore'))
     this.fs.copy(this.templatePath('tsconfig.json'), this.destinationPath('tsconfig.json'))
     this.fs.copy(this.templatePath('tslint.json'), this.destinationPath('tslint.json'))
 
@@ -122,13 +120,13 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.npmInstall(undefined, {
-      registry: this.answers.registry
-    })
+    // this.npmInstall(undefined, {
+    //   registry: this.answers.registry
+    // })
   }
 
   end() {
     this.log.ok('Project ' + this.answers.name + ' generated!!!')
-    this.spawnCommand('npm', ['run', 'test'])
+    // this.spawnCommand('npm', ['run', 'test'])
   }
 };
