@@ -1,7 +1,7 @@
 {
   "name": "generator-common-sdk",
   "version": "0.0.5",
-  "description": "生成通用的编写sdk的项目结构",
+ "description": "生成通用的编写sdk的项目结构",
   "homepage": "",
   "author": {
     "name": "ywymoshi",
